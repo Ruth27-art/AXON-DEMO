@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>✨ DANY - Cumpleaños Brillante ✨</title>
+    <!-- Librería html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Google Fonts Premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(ellipse at center, #0a0a2a 0%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            padding: 30px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Estrellas centelleantes de fondo */
+        .star {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.3; transform: scale(0.8); }
+        }
+
+        /* Contenedor principal con brillo externo */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(10, 10, 30, 0.5);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3), 0 25px 50px -12px black;
+            overflow: hidden;
+            padding: 35px;
+            position: relative;
+            z-index: 2;
+            animation: containerGlow 3s infinite alternate;
+        }
+
+        @keyframes containerGlow {
+            0% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.2), 0 25px 50px -12px black; border-color: rgba(255,215,0,0.3); }
+            100% { box-shadow: 0 0 80px rgba(255, 215, 0, 0.6), 0 25px 50px -12px black; border-color: rgba(255,215,0,0.8); }
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-weight: 400;
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #FFD700, #FFF8DC, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 25px;
+            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+            animation: titlePulse 2s infinite;
+        }
+
+        @keyframes titlePulse {
+            0% { letter-spacing: 2px; opacity: 0.9; }
+            100% { letter-spacing: 6px; opacity: 1; }
+        }
+
+        .editor {
+            margin-bottom: 35px;
+        }
+
+        .editor label {
+            display: block;
+            font-weight: 400;
+            color: #FFD700;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .editor textarea {
+            width: 100%;
+            padding: 18px 24px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            border-radius: 40px;
+            font-family: 'Montserrat', monospace;
+            font-size: 1rem;
+            color: #FFF8DC;
+            resize: vertical;
+            transition: all 0.3s;
+            backdrop-filter: blur(4px);
+        }
+
+        .editor textarea:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Botón brillante extremo */
+        button {
+            background: linear-gradient(135deg, #2a2418 0%, #1f1b10 100%);
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 0 auto 35px auto;
+            box-shadow: 0 0 15px rgba(255,215,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.6), transparent);
+            transition: left 0.6s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #3d3522 0%, #2c2618 100%);
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.8);
+            transform: scale(1.05);
+            border-color: #FFF8DC;
+        }
+
+        /* TARJETA PREMIUM BRILLANTE */
+        .tarjeta {
+            background: linear-gradient(145deg, #0f0f1a 0%, #080812 100%);
+            border-radius: 48px;
+            padding: 55px 45px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,215,0,0.2), 0 0 30px rgba(255,215,0,0.2);
+            font-family: 'Cormorant Garamond', serif;
+            position: relative;
+            border: 1px solid rgba(255, 215, 0, 0.6);
+            transition: all 0.3s;
+            cursor: pointer;
+            animation: cardGlow 2s infinite alternate;
+        }
+
+        @keyframes cardGlow {
+            0% { box-shadow: 0 25px 45px rgba(0,0,0,0.7), 0 0 20px rgba(255,215,0,0.2); }
+            100% { box-shadow: 0 25px 45px rgba(0,0,0,0.7), 0 0 50px rgba(255,215,0,0.6); }
+        }
+
+        .tarjeta:hover {
+            transform: scale(1.02);
+        }
+
+        /* Decoración dorada brillante */
+        .tarjeta::before,
+        .tarjeta::after {
+            content: "✦";
+            position: absolute;
+            font-size: 24px;
+            color: #FFD700;
+            text-shadow: 0 0 10px gold;
+        }
+        .tarjeta::before { top: 15px; left: 20px; }
+        .tarjeta::after { bottom: 15px; right: 20px; }
+
+        /* Vela con llama brillante */
+        .vela {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: flotar 3s infinite ease-in-out;
+        }
+        .llama {
+            font-size: 58px;
+            display: inline-block;
+            filter: drop-shadow(0 0 12px #FF8C00) drop-shadow(0 0 20px #FFD700);
+            animation: llamaIntensa 0.06s infinite alternate;
+            transform-origin: center bottom;
+        }
+        @keyframes llamaIntensa {
+            0% { opacity: 0.9; text-shadow: 0 0 5px orange; transform: scale(1);}
+            100% { opacity: 1; text-shadow: 0 0 25px #FFD700, 0 0 35px #FF6347; transform: scale(1.05);}
+        }
+        .cuerpo-vela {
+            font-size: 48px;
+            display: block;
+            margin-top: -20px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+
+        /* Globos brillantes */
+        .globo-elegante {
+            text-align: center;
+            font-size: 54px;
+            letter-spacing: 15px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 6px gold);
+            animation: levitarBrillante 3s infinite alternate;
+        }
+        @keyframes levitarBrillante {
+            0% { transform: translateY(0px) rotate(-2deg); filter: drop-shadow(0 0 4px gold);}
+            100% { transform: translateY(-12px) rotate(2deg); filter: drop-shadow(0 0 20px #FFD700);}
+        }
+
+        .titulo {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 500;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, #FFD700, #FFF5CC, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-family: 'Cormorant Garamond', serif;
+            animation: textBright 1.5s infinite alternate;
+        }
+        @keyframes textBright {
+            0% { text-shadow: 0 0 5px gold; opacity: 0.9; }
+            100% { text-shadow: 0 0 20px #FFD700; opacity: 1; }
+        }
+
+        /* Nombre DANY con brillo pulsante */
+        .nombre {
+            text-align: center;
+            font-size: 3.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFD700, #FFF5CC, #FFE66D, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 35px;
+            font-family: 'Dancing Script', cursive;
+            letter-spacing: 6px;
+            animation: nombreBrillante 1s infinite alternate;
+        }
+        @keyframes nombreBrillante {
+            0% { text-shadow: 0 0 8px gold; transform: scale(1);}
+            100% { text-shadow: 0 0 30px #FFD700, 0 0 15px #FFA500; transform: scale(1.02);}
+        }
+
+        .mensaje {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: #FFF8E7;
+            text-align: center;
+            background: rgba(20, 20, 40, 0.6);
+            padding: 28px;
+            border-radius: 40px;
+            margin-bottom: 35px;
+            white-space: pre-wrap;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        .firma {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #FFD700;
+            font-style: italic;
+            border-top: 2px dotted rgba(255, 215, 0, 0.6);
+            padding-top: 20px;
+            letter-spacing: 2px;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Animación flotante vela */
+        @keyframes flotar {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-8px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .container { padding: 20px; }
+            .tarjeta { padding: 30px 20px; }
+            .titulo { font-size: 2rem; letter-spacing: 3px; }
+            .nombre { font-size: 2.5rem; }
+            .mensaje { font-size: 1rem; }
+            .globo-elegante { font-size: 38px; letter-spacing: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Tarjeta idéntica a la imagen que mandaste -->
+        <div id="tarjetaPDF" class="tarjeta">
+            <div class="titulo">HAPPY BIRTHDAY</div>
+            <div class="nombre">DANY</div>
+            <div class="mensaje">
+¡Feliz cumpleaños, Dany!
+
+Que este nuevo año de vida esté lleno de alegría y mucho éxito.  
+Eres una persona increíble y mereces todo lo mejor.
+
+Que todos tus sueños se cumplan, que tengas buena salud y que 
+la felicidad te acompañe siempre.
+
+¡Disfruta de tu día al máximo!  
+            </div>
+            <div class="firma">
+Con cariño, Ruth
+            </div>
+        </div>
+
+        
+    </div>
+
+    <script>
+        document.getElementById('generarPDF').addEventListener('click', function() {
+            const element = document.getElementById('tarjetaPDF');
+            const btn = this;
+            const textoOriginal = btn.innerText;
+            btn.innerText = '⏳ Generando...';
+            btn.disabled = true;
+
+            const opt = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: 'Tarjeta_Dany_Ruth.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, letterRendering: true, backgroundColor: '#fff9ef' },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = textoOriginal;
+                btn.disabled = false;
+            }).catch(() => {
+                btn.innerText = '❌ Error';
+                setTimeout(() => {
+                    btn.innerText = textoOriginal;
+                    btn.disabled = false;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
